@@ -31,6 +31,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
     let mut delay_timer: u8 = 0;
     let mut sound_timer: u8 = 0;
     let mut register: [u8; 16] = [0; 16];
+    let mut keypad: [bool; 16] = [false; 16];
 
     let millis = time::Duration::from_millis(5);
 
@@ -203,9 +204,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                     }
                 }
             }
+            0xE000 => match instruction & 0x00FF {
+                0x009E => {
+                    if keypad[register[x] as usize] == true {
+                        program_counter += 2;
+                    }
+                }
+                0x00A1 => {
+                    if keypad[register[x] as usize] == false {
+                        program_counter += 2;
+                    }
+                }
+                _ => {}
+            },
             _ => {}
         }
         // execute instruction
+        update_keypad(keypad);
         print_display(display);
 
         thread::sleep(millis);
@@ -228,6 +243,35 @@ fn print_display(display: [[bool; 32]; 64]) {
                     WHITE,
                 );
             }
+        }
+    }
+}
+
+fn update_keypad(mut keypad: [bool; 16]) {
+    let keycodes = [
+        KeyCode::Key1,
+        KeyCode::Key2,
+        KeyCode::Key3,
+        KeyCode::Key4,
+        KeyCode::Q,
+        KeyCode::W,
+        KeyCode::E,
+        KeyCode::R,
+        KeyCode::A,
+        KeyCode::S,
+        KeyCode::D,
+        KeyCode::F,
+        KeyCode::Z,
+        KeyCode::X,
+        KeyCode::C,
+        KeyCode::V,
+    ];
+
+    for i in 0..16 {
+        if is_key_down(keycodes[i]) {
+            keypad[i] = true;
+        } else {
+            keypad[i] = false;
         }
     }
 }
