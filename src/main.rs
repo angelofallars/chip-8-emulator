@@ -104,7 +104,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
             }
             0x7000 => {
                 if register[x] as usize + nn as usize > 0xFF {
-                    register[x] = 0xFF;
+                    register[x] = ((register[x] as u16 + nn as u16) % 256).try_into().unwrap();
                 } else {
                     register[x] += nn;
                 }
@@ -123,8 +123,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                     register[x] = register[x] ^ register[y];
                 }
                 0x0004 => {
-                    if register[x] as usize + register[y] as usize >= 0xFF {
-                        register[x] = 0xFF;
+                    if register[x] as usize + register[y] as usize > 0xFF {
+                        register[x] = ((register[x] as u16 + register[y] as u16) % 256)
+                            .try_into()
+                            .unwrap();
                         register[0xF] = 1;
                     } else {
                         register[x] += register[y];
@@ -136,7 +138,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                         register[x] = register[x] - register[y];
                         register[0xF] = 1;
                     } else {
-                        register[x] = 0;
+                        register[x] = (256
+                            - (((register[x] as i16 - register[y] as i16) * -1) % 256))
+                            .try_into()
+                            .unwrap();
                         register[0xF] = 0;
                     }
                 }
@@ -145,7 +150,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                         register[x] = register[y] - register[x];
                         register[0xF] = 1;
                     } else {
-                        register[x] = 0;
+                        register[x] = (256
+                            - (((register[y] as i16 - register[x] as i16) * -1) % 256))
+                            .try_into()
+                            .unwrap();
                         register[0xF] = 0;
                     }
                 }
