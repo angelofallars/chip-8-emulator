@@ -75,6 +75,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                 stack.push(program_counter);
                 program_counter = nnn;
             }
+            0x3000 => {
+                if register[x] == nn {
+                    program_counter += 2;
+                }
+            }
+            0x4000 => {
+                if register[x] != nn {
+                    program_counter += 2;
+                }
+            }
+            0x5000 => {
+                if register[x] == register[y] {
+                    program_counter += 2;
+                }
+            }
+            0x9000 => {
+                if register[x] != register[y] {
+                    program_counter += 2;
+                }
+            }
             0x6000 => {
                 register[x] = nn;
             }
