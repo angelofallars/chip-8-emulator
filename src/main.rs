@@ -157,7 +157,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
 const PIXEL_SIZE: usize = 16;
 
 fn print_display(display: [[bool; 32]; 64]) {
-    clear_background(WHITE);
+    clear_background(BLACK);
     for i in 0..32 {
         for j in 0..64 {
             if display[j][i] == true {
@@ -166,7 +166,7 @@ fn print_display(display: [[bool; 32]; 64]) {
                     (i * PIXEL_SIZE) as f32,
                     PIXEL_SIZE as f32,
                     PIXEL_SIZE as f32,
-                    BLACK,
+                    WHITE,
                 );
             }
         }
