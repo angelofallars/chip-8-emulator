@@ -214,7 +214,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                 0x009E => {
                     if keypad[register[x] as usize] == true {
                         program_counter += 2;
-                        exit(1);
                     }
                 }
                 0x00A1 => {
