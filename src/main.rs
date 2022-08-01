@@ -208,6 +208,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                 0x009E => {
                     if keypad[register[x] as usize] == true {
                         program_counter += 2;
+                        exit(1);
                     }
                 }
                 0x00A1 => {
@@ -262,19 +263,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                     memory[index_register as usize + 2] = digit_three;
                 }
                 0x0055 => {
-                    let num = register[x];
-
-                    for i in 0..num {
-                        if i < 16 {
-                            memory[index_register as usize + i as usize] = register[i as usize];
-                        } else {
-                            memory[index_register as usize + i as usize] = 0;
-                        }
+                    for i in 0..=x {
+                        memory[index_register as usize + i as usize] = register[i as usize];
                     }
                 }
                 0x0065 => {
-                    let num = register[x];
-                    for i in 0..num {
+                    for i in 0..=x {
                         register[i as usize] = memory[index_register as usize + i as usize];
                     }
                 }
