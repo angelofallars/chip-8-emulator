@@ -35,7 +35,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
 
     let mut timer_counter = 0;
 
-    let millis = time::Duration::from_millis(2);
+    let millis = time::Duration::from_millis(1);
 
     // Load the program in memory
     for i in 0..file.len() {
@@ -57,6 +57,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
         let nnn = (instruction & 0x0FFF) >> 0;
 
         program_counter += 2;
+
+        println!("{:#4X}", instruction);
 
         // decode instruction
         match instruction & 0xF000 {
@@ -258,7 +260,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                         program_counter -= 2;
                     }
                 }
-                0x0029 => {}
+                0x0029 => {
+                    println!("Font opcode called");
+                }
                 0x0033 => {
                     let number = register[x];
                     let digit_one = (number / 100) % 100;
@@ -285,11 +289,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
         }
         // execute instruction
         update_keypad(&mut keypad);
-        print_display(display);
-
         timer_counter += 1;
 
-        if timer_counter > 16 {
+        if timer_counter > 6 {
             if sound_timer > 0 {
                 sound_timer -= 1;
             }
@@ -300,11 +302,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
         }
 
         thread::sleep(millis);
+        print_display(display);
         next_frame().await
     }
 }
 
-const PIXEL_SIZE: usize = 16;
+const PIXEL_SIZE: f32 = 8.0;
 
 fn print_display(display: [[bool; 32]; 64]) {
     clear_background(BLACK);
@@ -312,10 +315,10 @@ fn print_display(display: [[bool; 32]; 64]) {
         for j in 0..64 {
             if display[j][i] == true {
                 draw_rectangle(
-                    (j * PIXEL_SIZE) as f32,
-                    (i * PIXEL_SIZE) as f32,
-                    PIXEL_SIZE as f32,
-                    PIXEL_SIZE as f32,
+                    j as f32 * PIXEL_SIZE,
+                    i as f32 * PIXEL_SIZE,
+                    PIXEL_SIZE,
+                    PIXEL_SIZE,
                     WHITE,
                 );
             }
