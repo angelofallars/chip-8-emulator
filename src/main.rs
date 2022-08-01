@@ -33,6 +33,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
     let mut register: [u8; 16] = [0; 16];
     let mut keypad: [bool; 16] = [false; 16];
 
+    let mut timer_counter = 0;
+
     let millis = time::Duration::from_millis(2);
 
     // Load the program in memory
@@ -279,6 +281,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
         // execute instruction
         update_keypad(&mut keypad);
         print_display(display);
+
+        timer_counter += 1;
+
+        if timer_counter > 16 {
+            if sound_timer > 0 {
+                sound_timer -= 1;
+            }
+            if delay_timer > 0 {
+                delay_timer -= 1;
+            }
+            timer_counter = 0;
+        }
 
         thread::sleep(millis);
         next_frame().await
