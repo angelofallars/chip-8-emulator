@@ -48,10 +48,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
         instruction = ((memory[program_counter as usize] as u16) << 8)
             | (memory[program_counter as usize + 1] as u16);
 
-        let x: usize = ((instruction & 0x0F00) >> 8).try_into().unwrap();
-        let y: usize = ((instruction & 0x00F0) >> 4).try_into().unwrap();
-        let n: u8 = ((instruction & 0x000F) >> 0).try_into().unwrap();
-        let nn: u8 = ((instruction & 0x00FF) >> 0).try_into().unwrap();
+        let right_instruction = memory[program_counter as usize + 1];
+
+        let x: usize = ((instruction & 0x0F00) >> 8) as usize;
+        let y: usize = ((instruction & 0x00F0) >> 4) as usize;
+        let n: u8 = right_instruction & 0x0F;
+        let nn: u8 = right_instruction & 0xFF;
         let nnn = (instruction & 0x0FFF) >> 0;
 
         program_counter += 2;
