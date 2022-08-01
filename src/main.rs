@@ -328,21 +328,21 @@ fn print_display(display: [[bool; 32]; 64]) {
 
 fn update_keypad(keypad: &mut [bool; 16]) {
     let keycodes = [
+        KeyCode::X,
         KeyCode::Key1,
         KeyCode::Key2,
         KeyCode::Key3,
-        KeyCode::Key4,
         KeyCode::Q,
         KeyCode::W,
         KeyCode::E,
-        KeyCode::R,
         KeyCode::A,
         KeyCode::S,
         KeyCode::D,
-        KeyCode::F,
         KeyCode::Z,
-        KeyCode::X,
         KeyCode::C,
+        KeyCode::Key4,
+        KeyCode::R,
+        KeyCode::F,
         KeyCode::V,
     ];
 
