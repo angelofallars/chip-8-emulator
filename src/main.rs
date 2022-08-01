@@ -50,15 +50,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
         let nn: u8 = ((instruction & 0x00FF) >> 0).try_into().unwrap();
         let nnn = (instruction & 0x0FFF) >> 0;
 
-        // println!("{:#04x}", x);
-        // println!("{:#04x}", y);
-        // println!("{:#04x}", n);
-        // println!("{:#04x}", nn);
-        // println!("{:#04x}", nnn);
-        //
-        // println!("{:#?}", register);
-        // println!("{:#?}", index_register);
-
         program_counter += 2;
 
         // decode instruction
