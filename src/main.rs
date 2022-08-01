@@ -3,6 +3,7 @@ use std::io::{self, Read, Write};
 use std::{fs::File, process::exit};
 use std::{thread, time};
 
+use ::rand::random;
 use clap::Parser;
 use macroquad::prelude::*;
 
@@ -107,6 +108,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
             }
             0xA000 => {
                 index_register = nnn;
+            }
+            0xC000 => {
+                register[x] = random::<u8>() & nn;
             }
             0xD000 => {
                 // draw
