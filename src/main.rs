@@ -109,6 +109,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
             0xA000 => {
                 index_register = nnn;
             }
+            0xB000 => {
+                program_counter = nnn + register[0] as u16;
+            }
             0xC000 => {
                 register[x] = random::<u8>() & nn;
             }
