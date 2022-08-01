@@ -277,7 +277,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
             _ => {}
         }
         // execute instruction
-        update_keypad(keypad);
+        update_keypad(&mut keypad);
         print_display(display);
 
         thread::sleep(millis);
@@ -304,7 +304,7 @@ fn print_display(display: [[bool; 32]; 64]) {
     }
 }
 
-fn update_keypad(mut keypad: [bool; 16]) {
+fn update_keypad(keypad: &mut [bool; 16]) {
     let keycodes = [
         KeyCode::Key1,
         KeyCode::Key2,
