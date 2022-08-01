@@ -54,16 +54,25 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
 
         // decode instruction
         match instruction & 0xF000 {
-            0x0000 => {
-                if instruction == 0x00E0 {
+            0x0000 => match instruction & 0x0FFF {
+                0x00E0 => {
                     for i in 0..64 {
                         for j in 0..32 {
                             display[i][j] = false;
                         }
                     }
                 }
-            }
+                0x00EE => {
+                    let address = stack.pop().unwrap();
+                    program_counter = address;
+                }
+                _ => {}
+            },
             0x1000 => {
+                program_counter = nnn;
+            }
+            0x2000 => {
+                stack.push(program_counter);
                 program_counter = nnn;
             }
             0x6000 => {
