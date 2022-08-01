@@ -106,6 +106,58 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                     register[x] += nn;
                 }
             }
+            0x8000 => match instruction & 0x000F {
+                0x0000 => {
+                    register[x] = register[y];
+                }
+                0x0001 => {
+                    register[x] = register[x] | register[y];
+                }
+                0x0002 => {
+                    register[x] = register[x] & register[y];
+                }
+                0x0003 => {
+                    register[x] = register[x] ^ register[y];
+                }
+                0x0004 => {
+                    if register[x] as usize + register[y] as usize >= 0xFF {
+                        register[x] = 0xFF;
+                        register[0xF] = 1;
+                    } else {
+                        register[x] += register[y];
+                        register[0xF] = 0;
+                    }
+                }
+                0x0005 => {
+                    if register[x] >= register[y] {
+                        register[x] = register[x] - register[y];
+                        register[0xF] = 1;
+                    } else {
+                        register[x] = 0;
+                        register[0xF] = 0;
+                    }
+                }
+                0x0007 => {
+                    if register[y] >= register[x] {
+                        register[x] = register[y] - register[x];
+                        register[0xF] = 1;
+                    } else {
+                        register[x] = 0;
+                        register[0xF] = 0;
+                    }
+                }
+                0x0006 => {
+                    let shifted_out_bit = register[x] & 0x01;
+                    register[x] = register[x] >> 1;
+                    register[0xF] = shifted_out_bit;
+                }
+                0x000E => {
+                    let shifted_out_bit = register[x] & 0x80 >> 7;
+                    register[x] = register[x] << 1;
+                    register[0xF] = shifted_out_bit;
+                }
+                _ => {}
+            },
             0xA000 => {
                 index_register = nnn;
             }
