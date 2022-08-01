@@ -95,7 +95,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                 }
             }
             0x9000 => {
-                if register[x] == register[y] {
+                if register[x] != register[y] {
                     program_counter += 2;
                 }
             }
