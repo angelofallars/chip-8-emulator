@@ -4,6 +4,7 @@ use std::{fs::File, process::exit};
 use std::{thread, time};
 
 use clap::Parser;
+use macroquad::prelude::*;
 
 #[derive(Parser, Debug)]
 #[clap(name = "chip-8-emulator")]
@@ -15,7 +16,8 @@ struct Args {
     file_name: String,
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
+#[macroquad::main("CHIP-8-Emulator")]
+async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
     let args = Args::parse();
 
     let file = fs::read(args.file_name)?;
@@ -126,27 +128,27 @@ fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
         }
         // execute instruction
         print_display(display);
+
         thread::sleep(millis);
+        next_frame().await
     }
 }
 
+const PIXEL_SIZE: usize = 16;
+
 fn print_display(display: [[bool; 32]; 64]) {
-    print!("\x1B[2J");
-
-    let stdout = io::stdout();
-    let mut handle = stdout.lock();
-
-    handle.write_all(b"\x1B[2J").unwrap();
-
+    clear_background(WHITE);
     for i in 0..32 {
         for j in 0..64 {
             if display[j][i] == true {
-                handle.write(b"\xE2\x96\x88").unwrap();
-            } else {
-                handle.write(b" ").unwrap();
+                draw_rectangle(
+                    (j * PIXEL_SIZE) as f32,
+                    (i * PIXEL_SIZE) as f32,
+                    PIXEL_SIZE as f32,
+                    PIXEL_SIZE as f32,
+                    BLACK,
+                );
             }
         }
-        handle.write_all(b"\n").unwrap();
     }
-    handle.flush().unwrap();
 }
