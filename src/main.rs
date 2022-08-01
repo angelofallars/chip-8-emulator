@@ -217,6 +217,64 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                 }
                 _ => {}
             },
+            0xF000 => match instruction & 0x00FF {
+                0x0007 => {
+                    register[x] = delay_timer;
+                }
+                0x0015 => {
+                    delay_timer = register[x];
+                }
+                0x0018 => {
+                    sound_timer = register[x];
+                }
+                0x001E => {
+                    if index_register + register[x] as u16 > 1000 {
+                        index_register = 1000;
+                        register[0xF] = 1;
+                    } else {
+                        index_register += register[x] as u16;
+                    }
+                }
+                0x000A => {
+                    let mut some_key_pressed = false;
+
+                    for i in 0..16 {
+                        if keypad[i] == true {
+                            some_key_pressed = true;
+                            register[x] = i.try_into().unwrap();
+                            break;
+                        }
+                    }
+
+                    if !some_key_pressed {
+                        program_counter -= 2;
+                    }
+                }
+                0x0029 => {}
+                0x0033 => {
+                    let number = register[x];
+                    let digit_one = (number / 100) % 100;
+                    let digit_two = (number / 10) % 10;
+                    let digit_three = number % 10;
+
+                    memory[index_register as usize] = digit_one;
+                    memory[index_register as usize + 1] = digit_two;
+                    memory[index_register as usize + 2] = digit_three;
+                }
+                0x0055 => {
+                    let num = register[x];
+                    for i in 0..num {
+                        memory[index_register as usize + i as usize] = register[i as usize];
+                    }
+                }
+                0x0065 => {
+                    let num = register[x];
+                    for i in 0..num {
+                        register[i as usize] = memory[index_register as usize + i as usize];
+                    }
+                }
+                _ => {}
+            },
             _ => {}
         }
         // execute instruction
