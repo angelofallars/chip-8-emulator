@@ -263,8 +263,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                 }
                 0x0055 => {
                     let num = register[x];
+
                     for i in 0..num {
-                        memory[index_register as usize + i as usize] = register[i as usize];
+                        if i < 16 {
+                            memory[index_register as usize + i as usize] = register[i as usize];
+                        } else {
+                            memory[index_register as usize + i as usize] = 0;
+                        }
                     }
                 }
                 0x0065 => {
