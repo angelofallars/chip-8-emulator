@@ -33,7 +33,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
     let mut register: [u8; 16] = [0; 16];
     let mut keypad: [bool; 16] = [false; 16];
 
-    let millis = time::Duration::from_millis(5);
+    let millis = time::Duration::from_millis(2);
 
     // Load the program in memory
     for i in 0..file.len() {
