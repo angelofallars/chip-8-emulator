@@ -213,6 +213,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                         break;
                     }
                 }
+                print_display(display);
+                next_frame().await
             }
             0xE000 => match instruction & 0x00FF {
                 0x009E => {
@@ -302,8 +304,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
         }
 
         thread::sleep(millis);
-        print_display(display);
-        next_frame().await
     }
 }
 
