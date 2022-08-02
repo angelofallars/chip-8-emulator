@@ -318,7 +318,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
     }
 }
 
-const PIXEL_SIZE: f32 = 8.0;
+const PIXEL_SIZE: f32 = 16.0;
 
 fn print_display(display: [[bool; 32]; 64]) {
     clear_background(BLACK);
