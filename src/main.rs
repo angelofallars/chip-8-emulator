@@ -337,7 +337,7 @@ fn print_display(display: [[bool; 32]; 64]) {
     }
 }
 
-fn update_keypad(keypad: &mut [bool; 16]) {
+fn update_keypad(mut keypad: [bool; 16]) -> [bool; 16] {
     let keycodes = [
         KeyCode::X,
         KeyCode::Key1,
@@ -364,4 +364,6 @@ fn update_keypad(keypad: &mut [bool; 16]) {
             keypad[i] = false;
         }
     }
+
+    return keypad;
 }
