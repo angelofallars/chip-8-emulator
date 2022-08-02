@@ -67,6 +67,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
 
         program_counter += 2;
 
+        keypad = update_keypad(keypad);
+
         println!("{:#4X}", instruction);
 
         // decode instruction
@@ -302,8 +304,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
             },
             _ => {}
         }
-        // execute instruction
-        update_keypad(&mut keypad);
         timer_counter += 1;
 
         if timer_counter > 6 {
