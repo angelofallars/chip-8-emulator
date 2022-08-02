@@ -1,6 +1,4 @@
 use std::fs;
-use std::io::{self, Read, Write};
-use std::{fs::File, process::exit};
 use std::{thread, time};
 
 use ::rand::random;
