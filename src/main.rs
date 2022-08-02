@@ -198,6 +198,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
                         let current_bit = (byte >> (7 - j)) & 0b1;
 
                         if current_bit == 1 {
+                            if display[x_coord][y_coord] == true {
+                                register[0xF] = 1;
+                            }
+
                             display[x_coord][y_coord] = !display[x_coord][y_coord];
                         }
 
