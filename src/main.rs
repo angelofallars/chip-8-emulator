@@ -13,7 +13,7 @@ use macroquad::prelude::*;
 #[clap(version = "1.0")]
 #[clap(about = "An emulator for chip-8 games written in Rust.")]
 struct Args {
-    #[clap(value_parser)]
+    #[clap(value_parser, help = "CHIP-8 ROM to open.")]
     file_name: String,
 }
 
