@@ -15,6 +15,14 @@ use macroquad::prelude::*;
 struct Args {
     #[clap(value_parser, help = "CHIP-8 ROM to open.")]
     file_name: String,
+
+    #[clap(
+        long,
+        value_parser,
+        help = "How many instructions to run per second.",
+        default_value_t = 700
+    )]
+    speed: u32,
 }
 
 #[macroquad::main("CHIP-8-Emulator")]
@@ -35,7 +43,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
 
     let mut timer_counter = 0;
 
-    let millis = time::Duration::from_millis(1);
+    let speed = 1.0 / (args.speed) as f64;
+    let speed_in_ms = time::Duration::from_secs_f64(speed);
 
     // Load the program in memory
     for i in 0..file.len() {
@@ -307,7 +316,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
             timer_counter = 0;
         }
 
-        thread::sleep(millis);
+        thread::sleep(speed_in_ms);
     }
 }
 
