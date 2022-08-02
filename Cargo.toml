@@ -10,6 +10,9 @@ strip = true  # Automatically strip symbols from the binary.
 lto = true
 codegen-units = 1
 
+[profile.dev.package.'*']
+opt-level = 3
+
 [[bin]]
 name = "chip8"
 path = "src/main.rs"
