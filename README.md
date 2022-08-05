@@ -8,7 +8,7 @@ Requires: Rust
 
 ```bash
 git clone https://github.com/angelofallars/brainfrick-rs
-cd brainfrick-rs
+cd chip-8-emulator
 cargo install --path .
 ```
 
